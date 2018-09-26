@@ -1,0 +1,238 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Helvetica, sans-serif;
+}
+
+.message {
+  color: black;
+  font-weight: 600;
+  text-align: center;
+}
+
+.book-wrapper {
+  width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  position: relative;
+}
+
+.label {
+  width: auto;
+  margin: 5px;
+  font-size: .8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-wrapper {
+  width: 300px;
+  height: 300px;
+  margin-right: 20px;
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+  border: 1px solid rgb(59, 166, 253);
+  border-radius: 5px;
+}
+
+.input {
+  height: 25px;
+  padding: 2px 5px;
+  border: 1px solid rgb(59, 166, 253);
+  border-radius: 5px;
+}
+
+.btn {
+  width: 50%;
+  height: 40px;
+  margin: 10px auto 5px;
+  cursor: pointer;
+  background: rgb(148, 207, 255);
+  border: 1px solid rgb(59, 166, 253);
+  border-radius: 5px;
+  transition: all .3s ease-in-out;
+}
+
+.btn:hover {
+  background: #71afff
+}
+
+.buttons-wrapper {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.form-buttons {
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+};
+
+.btn.save {
+  background: yellow;
+}
+
+.btn.cancel {
+  background: transparent;
+  border: none;
+}
+
+.btn.cancel:hover {
+  color: rgb(19, 19, 158);
+}
+
+.btn.add {
+  background: yellowgreen;
+}
+
+.btn.add:hover {
+  background: yellow;
+}
+
+.btn.remove {
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+
+.btn.remove::before {
+  content: '\f1f8';
+  font-family: 'FontAwesome';
+  font-size: 20px;
+  position: absolute;
+  top: -1px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.btn.remove:hover {
+  color: rgb(160, 0, 0);
+  background: transparent;
+}
+
+.btn.edit {
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+
+.btn.edit::before {
+  content: '\f044';
+  font-family: 'FontAwesome';
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.btn.edit:hover {
+  color: rgb(216, 240, 0);
+  background: transparent;
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.list-wrapper {
+  width: 450px;
+  overflow-y: auto;
+  padding: 10px;
+  color: white;
+  border-radius: 5px; 
+  position: absolute;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  position: relative;
+  line-height: 2rem;
+}
+
+.list-item.name {
+  font-weight: 600;
+}
+
+.list-item.address {
+  padding-left: 22px;
+}
+
+.list-item.address::before {
+  content: '\f015';
+  font-family: 'FontAwesome';
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  left: 0;
+  font-size: 18px;
+}
+
+.list-item.phone {
+  padding-left: 22px;
+  margin-right: 15px;
+}
+
+.list-item.phone::before {
+  content: '\f095';
+  font-family: 'FontAwesome';
+  width: 100%;
+  position: absolute;
+  top: -9px;
+  left: 0;
+  font-size: 18px;
+}
+
+.list-item.email {
+  padding-left: 22px;
+}
+
+.list-item.email::before {
+  content: '\f1fa';
+  font-family: 'FontAwesome';
+  width: 100%;
+  position: absolute;
+  top: -9px;
+  left: 0;
+  font-size: 18px;
+}
+
+.list-item-wrapper {
+  position: relative;
+  padding: 10px;
+  background: rgb(134, 200, 255);
+  border-radius: 5px; 
+  margin: 5px 0;
+}
