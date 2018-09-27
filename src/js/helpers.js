@@ -2,14 +2,30 @@ export const on = (target, type, callback, capture) => target.addEventListener(t
 
 export const qs = selector => document.querySelector(selector);
 
-export const ac = (parent, child) => parent.appendChild(child);
+export const appendChild = (parent, child) => parent.appendChild(child);
 
-export const rc = (parent, child) => parent.removeChild(child);
+export const removeChild = (parent, child) => parent.removeChild(child);
 
-export const ce = elementName => document.createElement(elementName);
+export const createElement = elementName => document.createElement(elementName);
 
-export const showMessage = messageText => `<span class="message">${ messageText }</span>`;
+export const toggleEmptyListMessage = list => {
+  const empty = isListEmpty(list);
+  const message = qs('#empty-list-message');
+  return empty ? message.textContent = 'There is no address yet.' : message.textContent = '';
+};
 
 export const isListEmpty = list => list.length <= 0 ? true : false;
 
 export const isRequiredFieldNotEmpty = form => form.checkValidity() ? true : false;
+
+export const setInitialFormValues = () => ({
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNo: '',
+  street: '',
+  streetNo: '',
+  town: '',
+  postalCode: ''
+});

@@ -1,10 +1,8 @@
-import { createButton, setInitialFormValues } from './template';
-import { ac, rc, ce, qs, isRequiredFieldNotEmpty } from './helpers';
+import { appendChild, removeChild, createElement, qs, setInitialFormValues, isRequiredFieldNotEmpty } from './helpers';
 
 export class View {
 
-  constructor(listName) {
-    this.listName = listName;
+  constructor() {
     this.initialFormState = setInitialFormValues();
     this.formHook = this.getFormHook();
     this.addressListHook = this.getAddressListRoot();
@@ -31,16 +29,25 @@ export class View {
     return qs('#form-buttons');
   };
 
+  createButton = (type, actionType, text) => {
+    const button = document.createElement('button');
+    button.setAttribute('type', type);
+    button.setAttribute('name', actionType);
+    button.classList.add('btn', actionType);
+    button.textContent = text;
+    return button;
+  };
+
   createAddButton() {
-    return createButton('submit', 'add', 'Add an address');
+    return this.createButton('submit', 'add', 'Add an address');
   };
 
   createSaveButton() {
-    return createButton('submit', 'save', 'Save');
+    return this.createButton('submit', 'save', 'Save');
   };
 
   createCancelButton() {
-    return createButton('reset', 'cancel', 'Cancel');
+    return this.createButton('reset', 'cancel', 'Cancel');
   };
 
   getAddressRoot(e) {
@@ -57,10 +64,9 @@ export class View {
 
   bindAddAddress(handler) {
     this.formHook.addEventListener('click', e => {
-      // e.preventDefault();
       if (e.target.name === 'add' && isRequiredFieldNotEmpty(this.formHook)) {
         const listItem = this.createListItem(handler());
-        ac(this.addressListHook, listItem);
+        appendChild(this.addressListHook, listItem);
       };
     });
   };
@@ -86,42 +92,45 @@ export class View {
   };
 
   createListItem(addressData) {
-    const listItemWrapper = ce('li');
+    const listItemWrapper = createElement('li');
     listItemWrapper.classList.add('list-item-wrapper');
     listItemWrapper.setAttribute('data-id', addressData.id);
-    const listItem = ce('p');
+    const listItem = createElement('p');
     listItem.classList.add('list-item', 'name');
     listItem.textContent = addressData.firstName + ' ' + addressData.lastName;
-    const addressSection = ce('p');
+    const addressSection = createElement('p');
     addressSection.classList.add('list-item', 'address')
-    addressSection.textContent = addressData.street + ' ' + addressData.streetNo + ', ' + addressData.postalCode + ' ' + addressData.town;
-    const contactWrapper = ce('div');
+    addressSection.textContent = `
+      ${addressData.street} ${addressData.streetNo}, 
+      ${addressData.postalCode} ${addressData.town}
+    `;
+    const contactWrapper = createElement('div');
     contactWrapper.classList.add('contact-wrapper');
-    const phone = ce('span');
+    const phone = createElement('span');
     phone.classList.add('list-item', 'phone');
     phone.textContent = addressData.phoneNo;
-    const email = ce('span');
+    const email = createElement('span');
     email.classList.add('list-item', 'email');
     email.textContent = addressData.email;
-    addressData.phoneNo ? ac(contactWrapper, phone) : false;
-    addressData.email ? ac(contactWrapper, email) : false;
-    const buttonsWrapper = ce('form');
+    addressData.phoneNo ? appendChild(contactWrapper, phone) : false;
+    addressData.email ? appendChild(contactWrapper, email) : false;
+    const buttonsWrapper = createElement('form');
     buttonsWrapper.classList.add('buttons-wrapper');
-    const editButton = createButton('submit', 'edit', '');
-    ac(buttonsWrapper, editButton);
-    const removeButton = createButton('submit', 'remove', '');
-    ac(buttonsWrapper, removeButton);
-    ac(listItemWrapper, listItem);
-    ac(listItemWrapper, addressSection);
-    ac(listItemWrapper, contactWrapper);
-    ac(listItemWrapper, buttonsWrapper);
+    const editButton = this.createButton('submit', 'edit', '');
+    appendChild(buttonsWrapper, editButton);
+    const removeButton = this.createButton('submit', 'remove', '');
+    appendChild(buttonsWrapper, removeButton);
+    appendChild(listItemWrapper, listItem);
+    appendChild(listItemWrapper, addressSection);
+    appendChild(listItemWrapper, contactWrapper);
+    appendChild(listItemWrapper, buttonsWrapper);
     return listItemWrapper;
   };
 
   removeListItem(e) {
     e.preventDefault();
     const addressRoot = this.getAddressRoot(e);
-    rc(this.addressListHook, addressRoot);
+    removeChild(this.addressListHook, addressRoot);
   };
 
   clearAddressList() {

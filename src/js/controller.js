@@ -1,25 +1,20 @@
 import { Store } from './model';
 import { View } from './view';
 import { Address } from './single-address';
-import { ac, showMessage, isListEmpty } from './helpers';
-import { setInitialFormValues } from './template';
+import { appendChild, toggleEmptyListMessage, setInitialFormValues } from './helpers';
 
 export class Controller {
 
-  noAddressMessage = 'There is no address in the book yet';
+  constructor() {
 
-  constructor(listName) {
+    this.HIDDEN_STATE_STRING = 'hidden';
     
-    this.listName = listName;
     this.initialFormState = setInitialFormValues();
 
-    this.store = new Store(listName);
-    this.editStore = new Store('isEdited');
-    this.isEditing = this.editStore.fetchFromLocalStorage('isEdited');
-    this.addressList = this.store.fetchFromLocalStorage(this.listName);
+    this.store = new Store();
+    this.addressList = this.store.fetchFromLocalStorage();
     
-    this.view = new View(listName);
-    this.listRoot = this.view.getAddressListRoot();
+    this.view = new View();
     this.form = this.view.getFormHook();
     this.formButtonsWrapper = this.view.getFormButtonsWrapper();
     this.addButton = this.view.createAddButton();
@@ -32,48 +27,45 @@ export class Controller {
   };
 
   showEditButtons() {
-    this.addButton.classList.add('hidden');
-    this.saveButton.classList.remove('hidden');
-    this.cancelButton.classList.remove('hidden');
-  }
+    this.addButton.classList.add(this.HIDDEN_STATE_STRING);
+    this.saveButton.classList.remove(this.HIDDEN_STATE_STRING);
+    this.cancelButton.classList.remove(this.HIDDEN_STATE_STRING);
+  };
 
   hideEditButtons() {
-    this.addButton.classList.remove('hidden');
-    this.saveButton.classList.add('hidden');
-    this.cancelButton.classList.add('hidden');
+    this.addButton.classList.remove(this.HIDDEN_STATE_STRING);
+    this.saveButton.classList.add(this.HIDDEN_STATE_STRING);
+    this.cancelButton.classList.add(this.HIDDEN_STATE_STRING);
   };
 
   addNewAddress() {
-    let addressConfig = this.getFormInputsValues();
-   
-    let list = this.store.fetchFromLocalStorage(this.listName);
+    const addressConfig = this.getFormInputsValues();
+    const list = this.store.fetchFromLocalStorage();
     const newAddress = new Address(addressConfig);
-    list = [ ...list, newAddress];
+    const newList = [ ...list, newAddress];
 
     this.view.fillFormInputs(this.initialFormState);
-    this.store.saveToLocalStorage(list);
+    this.store.saveToLocalStorage(newList);
 
-    isListEmpty(list) ? this.view.clearAddressList() : false;
+    toggleEmptyListMessage(newList);
     return newAddress;
   };
 
   removeAddress(id) {
-    const addressList = this.store.fetchFromLocalStorage(this.listName);
+    const addressList = this.store.fetchFromLocalStorage();
     const newList = addressList.filter(address => address.id !== id);
     this.store.saveToLocalStorage(newList);
-
-    isListEmpty(addressList) ? this.view.clearAddressList() : false;
+    toggleEmptyListMessage(this.store.fetchFromLocalStorage());
   };
 
   editAddress(id) {
-    const addressList = this.store.fetchFromLocalStorage(this.listName);
+    const addressList = this.store.fetchFromLocalStorage();
     let editedAddressConfig = {};
+    
     addressList.filter(address => address.id === id)
       .map(el => editedAddressConfig = { ...editedAddressConfig, ...el });
 
     this.view.fillFormInputs(editedAddressConfig);
-    this.isEditing = true;
-    this.editStore.saveToLocalStorage(this.isEditing);
     this.showEditButtons();
   };
 
@@ -90,8 +82,6 @@ export class Controller {
 
   cancelEditAddress(e) {
     e.preventDefault();
-    this.isEditing = false;
-    this.editStore.saveToLocalStorage(this.isEditing);
     this.view.fillFormInputs(this.initialFormState);
     this.hideEditButtons();
     this.view.clearAddressList();
@@ -101,15 +91,13 @@ export class Controller {
   saveEditedAddress(e) {
     e.preventDefault();
     const editConfig = this.getFormInputsValues();
-    let addressData = this.store.fetchFromLocalStorage(this.listName);
+    const addressData = this.store.fetchFromLocalStorage();
     const editedData = addressData.map(address => {
       if (address.id === editConfig.id) {
         return editConfig;
       };
       return address;
     });
-    this.isEditing = false;
-    this.editStore.saveToLocalStorage(this.isEditing);
     this.store.saveToLocalStorage(editedData);
     this.view.fillFormInputs(this.initialFormState);
     this.hideEditButtons();
@@ -118,12 +106,13 @@ export class Controller {
   };
 
   showList() {
-    const addressList = this.store.fetchFromLocalStorage(this.listName);
+    const listRoot = this.view.getAddressListRoot();
+    const addressList = this.store.fetchFromLocalStorage();
     this.view.fillFormInputs(this.initialFormState);
 
-    return addressList.map(addressItem => {
+    addressList.map(addressItem => {
       const address = this.view.createListItem(addressItem);
-      ac(this.listRoot, address);
+      appendChild(listRoot, address);
     });
   };
 
@@ -131,24 +120,16 @@ export class Controller {
     this.cancelButton.addEventListener('click', e => this.cancelEditAddress(e));
     this.saveButton.addEventListener('click', e => this.saveEditedAddress(e));
 
-    ac(this.formButtonsWrapper, this.addButton);
-    ac(this.formButtonsWrapper, this.saveButton);
-    ac(this.formButtonsWrapper, this.cancelButton);
+    appendChild(this.formButtonsWrapper, this.addButton);
+    appendChild(this.formButtonsWrapper, this.saveButton);
+    appendChild(this.formButtonsWrapper, this.cancelButton);
     this.hideEditButtons();
   };
 
-  // removeAllAdresses() {
-  //   this.store.clearStore();
-  //   this.view.clearAddressList();
-  // };
-
   viewInit() {
-    
     this.view.fillFormInputs(this.initialFormState);
     this.showformButtons();
-    
-    this.addressList && this.addressList.length > 0
-    ? this.showList() 
-    : this.listRoot.innerHTML = showMessage(this.noAddressMessage);
+    this.showList();
+    toggleEmptyListMessage(this.addressList);
   };
 };

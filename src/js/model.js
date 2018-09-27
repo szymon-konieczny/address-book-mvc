@@ -1,7 +1,7 @@
 export class Store {
   
-  constructor(listName) {
-    this.listName = listName;
+  constructor() {
+    this.listName = 'Address Book';
   };
 
   fetchFromLocalStorage() {
@@ -9,7 +9,7 @@ export class Store {
       return JSON.parse(localStorage.getItem(this.listName)) || []
     } catch(err) {
       console.error('Error: ', err);
-    }
+    };
   };
 
   saveToLocalStorage(addressList) {
