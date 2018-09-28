@@ -38,16 +38,19 @@ export class View {
     return button;
   };
 
-  createAddButton() {
-    return this.createButton('submit', 'add', 'Add an address');
+  getAddButton() {
+    const addButton = qs('#add-button');
+    return addButton;
   };
 
-  createSaveButton() {
-    return this.createButton('submit', 'save', 'Save');
+  getSaveButton() {
+    const saveButton = qs('#save-button');
+    return saveButton;
   };
 
-  createCancelButton() {
-    return this.createButton('reset', 'cancel', 'Cancel');
+  getCancelButton() {
+    const cancelButton = qs('#cancel-button');
+    return cancelButton;
   };
 
   getAddressRoot(e) {
@@ -64,6 +67,7 @@ export class View {
 
   bindAddAddress(handler) {
     this.formHook.addEventListener('click', e => {
+      e.preventDefault();
       if (e.target.name === 'add' && isRequiredFieldNotEmpty(this.formHook)) {
         const listItem = this.createListItem(handler());
         appendChild(this.addressListHook, listItem);
@@ -90,6 +94,25 @@ export class View {
       };
     });
   };
+
+  bindSaveEditedAddress(handler) {
+    this.formHook.addEventListener('click', e => {
+      e.preventDefault();
+      if (e.target.name === 'save' && isRequiredFieldNotEmpty(this.formHook)) {
+        return handler();
+      };
+    });
+  };
+
+  bindCancelEditAddress(handler) {
+    this.formHook.addEventListener('click', e => {
+      e.preventDefault();
+      if (e.target.name === 'cancel' && isRequiredFieldNotEmpty(this.formHook)) {
+        return handler();
+      };
+    });
+  };
+
 
   createListItem(addressData) {
     const listItemWrapper = createElement('li');

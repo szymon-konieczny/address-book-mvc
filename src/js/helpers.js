@@ -8,12 +8,6 @@ export const removeChild = (parent, child) => parent.removeChild(child);
 
 export const createElement = elementName => document.createElement(elementName);
 
-export const toggleEmptyListMessage = list => {
-  const empty = isListEmpty(list);
-  const message = qs('#empty-list-message');
-  return empty ? message.textContent = 'There is no address yet.' : message.textContent = '';
-};
-
 export const isListEmpty = list => list.length <= 0 ? true : false;
 
 export const isRequiredFieldNotEmpty = form => form.checkValidity() ? true : false;

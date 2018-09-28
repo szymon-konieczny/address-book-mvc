@@ -4,7 +4,7 @@ export class Store {
     this.listName = 'Address Book';
   };
 
-  fetchFromLocalStorage() {
+  fetchAddressList() {
     try {
       return JSON.parse(localStorage.getItem(this.listName)) || []
     } catch(err) {
@@ -12,7 +12,7 @@ export class Store {
     };
   };
 
-  saveToLocalStorage(addressList) {
+  saveAddressList(addressList) {
     try {
       return localStorage.setItem(this.listName, JSON.stringify(addressList));
     } catch(err) {

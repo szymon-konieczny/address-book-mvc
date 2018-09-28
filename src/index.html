@@ -11,7 +11,7 @@
 			<label class="label" for="id">
 				<input name="id" id="id" type="hidden"/></label>
 			<label class="label" for="firstName">First name: 
-				<input class="input" name="firstName" id="firstName" type="text" required/></label>
+				<input class="input" name="firstName" id="firstName" type="text" autofocus required/></label>
 			<label class="label" for="lastName">Last name: 
 				<input class="input" name="lastName" id="lastName" type="text" required/></label>
 			<label class="label" for="email">Email: 
@@ -27,11 +27,12 @@
 			<label class="label" for="postalCode">Postal code:
 				<input class="input" name="postalCode" id="postalCode" type="text" /></label>
 			<div id="form-buttons" class="form-buttons">
-
+				<button id="add-button" name="add" type="submit" class="btn add">Add an address</button>
+				<button id="save-button" name="save" type="submit" class="btn save">Save</button>
+				<button id="cancel-button" name="cancel" type="reset" class="btn cancel">Cancel</button>
 			</div>
 		</form>
 		<ul id="list-wrapper" class="list-wrapper">
-			<h4 id="empty-list-message" class="message">There is no address yet.</h4>
 
 		</ul>
 	</div>
