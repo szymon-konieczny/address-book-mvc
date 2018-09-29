@@ -189,26 +189,7 @@ export class View {
   fillFormInputs(addressConfig) {
     return [...this.formHook.children].map(el => {
       if (el.lastChild.tagName === 'INPUT') {
-        switch (el.lastChild.name) {
-          case 'id':
-            return el.lastChild.value = addressConfig.id;
-          case 'firstName':
-            return el.lastChild.value = addressConfig.firstName;
-          case 'lastName':
-            return el.lastChild.value = addressConfig.lastName;
-          case 'email':
-            return el.lastChild.value = addressConfig.email;
-          case 'phoneNo':
-            return el.lastChild.value = addressConfig.phoneNo;
-          case 'street':
-            return el.lastChild.value = addressConfig.street;
-          case 'streetNo':
-            return el.lastChild.value = addressConfig.streetNo;
-          case 'town':
-            return el.lastChild.value = addressConfig.town;
-          case 'postalCode':
-            return el.lastChild.value = addressConfig.postalCode;
-        };
+        return el.lastChild.value = addressConfig[el.lastChild.name]
       };
     });
   };
