@@ -3,6 +3,12 @@ import { appendChild, removeChild, createElement, qs, setInitialFormValues, isRe
 export class View {
 
   constructor() {
+    this.addButton = this.getAddButton();
+    this.saveButton = this.getSaveButton();
+    this.cancelButton = this.getCancelButton();
+
+    this.HIDDEN_STATE_STRING = 'hidden';
+
     this.initialFormState = setInitialFormValues();
     this.formHook = this.getFormHook();
     this.addressListHook = this.getAddressListRoot();
@@ -38,6 +44,18 @@ export class View {
     return button;
   };
 
+  showEditButtons() {
+    this.addButton.classList.add(this.HIDDEN_STATE_STRING);
+    this.saveButton.classList.remove(this.HIDDEN_STATE_STRING);
+    this.cancelButton.classList.remove(this.HIDDEN_STATE_STRING);
+  };
+
+  hideEditButtons() {
+    this.addButton.classList.remove(this.HIDDEN_STATE_STRING);
+    this.saveButton.classList.add(this.HIDDEN_STATE_STRING);
+    this.cancelButton.classList.add(this.HIDDEN_STATE_STRING);
+  };
+
   getAddButton() {
     const addButton = qs('#add-button');
     return addButton;
@@ -70,6 +88,7 @@ export class View {
       e.preventDefault();
       if (e.target.name === 'add' && isRequiredFieldNotEmpty(this.formHook)) {
         const listItem = this.createListItem(handler());
+        this.fillFormInputs(this.initialFormState);
         appendChild(this.addressListHook, listItem);
       };
     });
@@ -88,8 +107,10 @@ export class View {
 
   bindEditAddress(handler) {
     return this.addressListHook.addEventListener('click', e => {
+      e.preventDefault();
       if (e.target.name === 'edit') {
         const id = this.getId(e);
+        this.showEditButtons();
         return handler(id);
       };
     });
@@ -99,7 +120,11 @@ export class View {
     this.formHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'save' && isRequiredFieldNotEmpty(this.formHook)) {
-        return handler();
+        const editedData = handler();
+        this.hideEditButtons();
+        this.clearAddressList();
+        this.fillFormInputs(this.initialFormState);
+        this.showList(editedData);
       };
     });
   };
@@ -108,11 +133,14 @@ export class View {
     this.formHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'cancel' && isRequiredFieldNotEmpty(this.formHook)) {
-        return handler();
+        const addressList = handler();
+        this.hideEditButtons();
+        this.clearAddressList();
+        this.fillFormInputs(this.initialFormState);
+        this.showList(addressList);
       };
     });
   };
-
 
   createListItem(addressData) {
     const listItemWrapper = createElement('li');
@@ -150,6 +178,14 @@ export class View {
     return listItemWrapper;
   };
 
+  showList(addressList) {
+    this.fillFormInputs(this.initialFormState);
+    addressList.map(addressItem => {
+      const address = this.createListItem(addressItem);
+      appendChild(this.addressListHook, address);
+    });
+  };
+
   removeListItem(e) {
     e.preventDefault();
     const addressRoot = this.getAddressRoot(e);
@@ -158,6 +194,16 @@ export class View {
 
   clearAddressList() {
     return this.addressListHook.innerHTML = '';
+  };
+
+  getFormInputsValues() {
+    let addressConfig = {};
+    [...document.forms[0]]
+      .map(el => el.tagName === 'INPUT' 
+        ? addressConfig = { ...addressConfig, [el.name]: el.value }
+        : el
+      );
+    return addressConfig;
   };
 
   fillFormInputs(addressConfig) {
