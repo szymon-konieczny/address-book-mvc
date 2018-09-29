@@ -10,29 +10,9 @@ export class View {
     this.HIDDEN_STATE_STRING = 'hidden';
 
     this.initialFormState = setInitialFormValues();
-    this.formHook = this.getFormHook();
-    this.addressListHook = this.getAddressListRoot();
-    this.buttonsWrapper = this.getFormButtonsWrapper();
-  };
-
-  getAppRoot() {
-    return qs('#address-book');
-  };
-
-  getAddressListRoot() {
-    return qs('#list-wrapper');
-  };
-
-  getFormHook() {
-    return qs('#form');
-  };
-
-  getRemoveAddressButton() {
-    return qs('.remove');
-  };
-
-  getFormButtonsWrapper() {
-    return qs('#form-buttons');
+    this.formHook = qs('#form');
+    this.addressListHook = qs('#list-wrapper');
+    this.buttonsWrapper = qs('#form-buttons');
   };
 
   createButton = (type, actionType, text) => {
