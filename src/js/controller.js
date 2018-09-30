@@ -18,20 +18,18 @@ export class Controller {
     this.view.bindCancelEditAddress(this.cancelEditAddress.bind(this));
   };
 
-  addNewAddress() {
-    const addressConfig = this.view.getFormInputsValues();
-    const list = this.store.fetchAddressList();
-    const newAddress = new Address(addressConfig);
-    const newList = [ ...list, newAddress];
+  getFormInputsValues(inputValues) {
+    return inputValues;
+  };
 
-    this.store.saveAddressList(newList);
-    return newAddress;
+  addNewAddress(addressConfig) {
+    const newAddress = new Address(addressConfig);
+    this.store.addNewAddress(newAddress);
+    this.view.addNewAddress(newAddress);
   };
 
   removeAddress(id) {
-    const addressList = this.store.fetchAddressList();
-    const newList = addressList.filter(address => address.id !== id);
-    this.store.saveAddressList(newList);
+    this.store.removeAddress(id);
   };
 
   editAddress(id) {

@@ -63,13 +63,18 @@ export class View {
     return id;
   };
 
+  addNewAddress(newAddress) {
+    const listItem = this.createListItem(newAddress);
+    this.fillFormInputs(this.initialFormState);
+    appendChild(this.addressListHook, listItem);
+  }
+
   bindAddAddress(handler) {
     this.formHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'add' && isRequiredFieldNotEmpty(this.formHook)) {
-        const listItem = this.createListItem(handler());
-        this.fillFormInputs(this.initialFormState);
-        appendChild(this.addressListHook, listItem);
+        const inputValues = this.getFormInputsValues();
+        handler(inputValues);
       };
     });
   };

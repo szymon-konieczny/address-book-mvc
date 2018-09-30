@@ -1,3 +1,4 @@
+import { Address } from './single-address';
 export class Store {
   
   constructor() {
@@ -20,7 +21,15 @@ export class Store {
     };
   };
 
-  clearStore() {
-    return localStorage.removeItem(this.listName);
+  addNewAddress(newAddress) {
+    const list = this.fetchAddressList();
+    const newList = [ ...list, newAddress];
+    this.saveAddressList(newList);
+  };
+
+  removeAddress(id) {
+    const addressList = this.fetchAddressList();
+    const newList = addressList.filter(address => address.id !== id);
+    this.saveAddressList(newList);
   };
 };
