@@ -32,12 +32,8 @@ export class Controller {
 
   editAddress(id) {
     const addressList = this.store.fetchAddressList();
-    let editedAddressConfig = {};
-    
-    addressList.filter(address => address.id === id)
-      .map(el => editedAddressConfig = { ...editedAddressConfig, ...el });
-    
-    this.view.editAddress(editedAddressConfig);
+    const editedAddress = addressList.find(address => address.id === id);
+    this.view.editAddress(editedAddress);
   };
 
   cancelEditAddress() {
@@ -53,5 +49,5 @@ export class Controller {
 
   setInitialView() {
     this.view.viewInit(this.addressList);
-  }
+  };
 };
