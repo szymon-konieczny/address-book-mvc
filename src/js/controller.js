@@ -7,8 +7,6 @@ export class Controller {
     this.store = store;
     this.view = view;
 
-    this.addressList = this.store.fetchAddressList();
-
     this.view.bindAddAddress(this.addNewAddress.bind(this));
     this.view.bindRemoveAddress(this.removeAddress.bind(this));
     this.view.bindEditAddress(this.editAddress.bind(this));
@@ -48,6 +46,7 @@ export class Controller {
   };
 
   setInitialView() {
-    this.view.viewInit(this.addressList);
+    const addressList = this.store.fetchAddressList();
+    this.view.viewInit(addressList);
   };
 };
