@@ -90,39 +90,50 @@ export class View {
     });
   };
 
+  editAddress(addressConfig) {
+    this.fillFormInputs(addressConfig);
+    this.showEditButtons();
+  };
+
   bindEditAddress(handler) {
     return this.addressListHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'edit') {
         const id = this.getId(e);
-        this.showEditButtons();
         return handler(id);
       };
     });
   };
 
-  bindSaveEditedAddress(handler) {
+  updateAddress(editedData) {
+    this.hideEditButtons();
+    this.clearAddressList();
+    this.fillFormInputs(this.initialFormState);
+    this.showList(editedData);
+  };
+
+  bindUpdateAddress(handler) {
     this.formHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'save' && isRequiredFieldNotEmpty(this.formHook)) {
-        const editedData = handler();
-        this.hideEditButtons();
-        this.clearAddressList();
-        this.fillFormInputs(this.initialFormState);
-        this.showList(editedData);
+        const inputValues = this.getFormInputsValues();
+        handler(inputValues);
       };
     });
+  };
+
+  cancelEditAddress(addressList) {
+    this.hideEditButtons();
+    this.clearAddressList();
+    this.fillFormInputs(this.initialFormState);
+    this.showList(addressList);
   };
 
   bindCancelEditAddress(handler) {
     this.formHook.addEventListener('click', e => {
       e.preventDefault();
       if (e.target.name === 'cancel' && isRequiredFieldNotEmpty(this.formHook)) {
-        const addressList = handler();
-        this.hideEditButtons();
-        this.clearAddressList();
-        this.fillFormInputs(this.initialFormState);
-        this.showList(addressList);
+        handler();
       };
     });
   };
@@ -197,5 +208,11 @@ export class View {
         return el.lastChild.value = addressConfig[el.lastChild.name]
       };
     });
+  };
+
+  viewInit(addressList) {
+    this.fillFormInputs(this.initialFormState);
+    this.hideEditButtons();
+    this.showList(addressList);
   };
 };

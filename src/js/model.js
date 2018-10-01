@@ -32,4 +32,15 @@ export class Store {
     const newList = addressList.filter(address => address.id !== id);
     this.saveAddressList(newList);
   };
+
+  updateAddress(editConfig) {
+    const addressData = this.fetchAddressList();
+    const editedData = addressData.map(address => {
+      if (address.id === editConfig.id) {
+        return editConfig;
+      };
+      return address;
+    });
+    this.saveAddressList(editedData);
+  };
 };

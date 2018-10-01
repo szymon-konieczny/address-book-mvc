@@ -8,4 +8,4 @@ const store = new Store;
 const view =  new View;
 const controller = new Controller(store, view);
 
-controller.viewInit();
+controller.setInitialView();
